@@ -22,30 +22,42 @@ namespace LibraryService.WebAPI.Controllers
         // Implement the functionalities below
         [HttpPost]
                
-        public async Task<IActionResult> AddBook([FromBody] Book book)
+        public async Task<IActionResult> AddBook(int libraryId, [FromBody] Book book)
         {
             if (book == null)
             {
                 return BadRequest();
             }
 
-            var newbook = await _booksService.Add(book);
-            return CreatedAtAction(nameof(GetBook), new {id = newbook.Id}, newbook);
-        }
+            var library = (await _librariesService.Get(new[] { libraryId })).FirstOrDefault();
+            if (library == null)
+                return NotFound();
+                  
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBook(int libraryId, int[] ids)
+
+            book.LibraryId = libraryId;
+            var newbook = await _booksService.Add(book);
+            return CreatedAtAction(nameof(AddBook), new {id = newbook.Id}, newbook);
+         }
+
+        [HttpGet] //("{libraryId}")]
+        public async Task<IActionResult> Get(int libraryId) //, int[] ids = null)
         {
-            var book = await _booksService.Get(libraryId, ids);
-            if (book == null)
-            {
+            var book = await _booksService.Get(libraryId, null); //, ids);
+            if (book == null) //  || book.Count() == 0)
+            { 
                 return NotFound();
             }
             return Ok(book);
         }
 
-
-
+       /* [HttpGet]
+        public async Task<IActionResult> GetAll(int id)
+        {
+            var books = await _booksService.Get(id, null);
+            return Ok(books);
+        }
+       */
 
     }
 }

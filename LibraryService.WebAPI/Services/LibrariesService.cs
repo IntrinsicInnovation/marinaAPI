@@ -60,6 +60,11 @@ namespace LibraryService.WebAPI.Services
 
             _libraryContext.Libraries.Remove(library);
 
+            //remove all books from the library as well:
+            var booksToRemove = _libraryContext.Books.Where(b => b.LibraryId == library.Id);
+            _libraryContext.Books.RemoveRange(booksToRemove);
+
+            await _libraryContext.SaveChangesAsync();
             return true;
           
           

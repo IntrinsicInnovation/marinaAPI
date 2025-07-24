@@ -62,12 +62,13 @@ namespace LibraryService.WebAPI.Controllers
             {
                 var lib = (await _librariesService.Get(new int[] {id})).FirstOrDefault();
            
-               // var li = lib.ToList(); 
-                
-                bool isDeleted = await _librariesService.Delete(lib);
-                if (isDeleted)
+                if (lib != null)
                 {
-                    return NoContent();
+                    bool isDeleted = await _librariesService.Delete(lib);
+                    if (isDeleted)
+                    {
+                        return NoContent();
+                    }
                 }
                 return NotFound();
             }

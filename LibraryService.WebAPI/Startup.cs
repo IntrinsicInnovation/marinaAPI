@@ -27,8 +27,8 @@ namespace LibraryService.WebAPI
             
             services.AddDbContext<LibraryContext>(options => options.UseInMemoryDatabase("librarydb"));
             services.AddControllers();
-            services.AddTransient< IBooksService, BooksService > (); // Replace [ServiceLifetime] with AddTransient, AddScoped, or AddSingleton
-            services.AddTransient<ILibrariesService, LibrariesService>(); // Replace [ServiceLifetime] with AddTransient, AddScoped, or AddSingleton
+            services.AddScoped <IBooksService, BooksService>(); // Replace [ServiceLifetime] with AddTransient, AddScoped, or AddSingleton
+            services.AddScoped  <ILibrariesService, LibrariesService>(); // Replace [ServiceLifetime] with AddTransient, AddScoped, or AddSingleton
 
         }
 

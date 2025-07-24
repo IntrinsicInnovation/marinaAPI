@@ -20,13 +20,16 @@ namespace LibraryService.WebAPI.Services
 
         public async Task<IEnumerable<Book>> Get(int libraryId, int[] ids)
         {
-          
+
             //return _books.FirstOrDefault(b => b.Id == id);
 
-            var allbooks = _libraryContext.Books.AsQueryable();
+            var allbooks =  _libraryContext.Books.AsQueryable().Where(b => b.LibraryId == libraryId);
 
-            if (ids != null && ids.Any())
-                allbooks = allbooks.Where(x => ids.Contains(x.Id) && x.LibraryId == libraryId);
+
+           // var allbooks = await _libraryContext.Books.Where(b => b.LibraryId == libraryId);
+
+           // if (ids != null && ids.Any())
+           //     allbooks = allbooks.Where(x => ids.Contains(x.Id) && x.LibraryId == libraryId);
 
             return await allbooks.ToListAsync();
         }
